@@ -238,7 +238,7 @@ Accounts.sendResetPasswordEmail = function (userId, email) {
   if (!email || !_.contains(_.pluck(user.emails || [], 'address'), email))
     throw new Error("No such email for user.");
 
-  var token = Random.id(128);
+  var token = Random.secret();
   var when = new Date();
   Meteor.users.update(userId, {$set: {
     "services.password.reset": {
@@ -279,7 +279,7 @@ Accounts.sendEnrollmentEmail = function (userId, email) {
     throw new Error("No such email for user.");
 
 
-  var token = Random.id(128);
+  var token = Random.secret();
   var when = new Date();
   Meteor.users.update(userId, {$set: {
     "services.password.reset": {
@@ -381,7 +381,7 @@ Accounts.sendVerificationEmail = function (userId, address) {
 
 
   var tokenRecord = {
-    token: Random.id(128),
+    token: Random.secret(),
     address: address,
     when: new Date()};
   Meteor.users.update(

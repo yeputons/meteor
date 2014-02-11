@@ -15,8 +15,8 @@ SRP = {};
 SRP.generateVerifier = function (password, options) {
   var params = paramsFromOptions(options);
 
-  var identity = (options && options.identity) || Random.id(128);
-  var salt = (options && options.salt) || Random.id(128);
+  var identity = (options && options.identity) || Random.secret();
+  var salt = (options && options.salt) || Random.secret();
 
   var x = params.hash(salt + params.hash(identity + ":" + password));
   var xi = new BigInteger(x, 16);

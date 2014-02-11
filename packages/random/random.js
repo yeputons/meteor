@@ -86,6 +86,8 @@ var Alea = function () {
 };
 
 var UNMISTAKABLE_CHARS = "23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz";
+var BASE64_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+  "0123456789+/";
 
 // If seeds are provided, then the alea PRNG will be used, since cryptographic
 // PRNGs (Node crypto and window.crypto.getRandomValues) don't allow us to
@@ -138,26 +140,33 @@ RandomGenerator.prototype.hexString = function (digits) {
   }
 };
 
-stringLenForEntropy = function (entropyBitsCount, charsCount) {
-  return Math.ceil(Math.log(Math.pow(2, entropyBitsCount))/Math.log(charsCount));
-};
-
-RandomGenerator.prototype.id = function (entropyBitsCount) {
+RandomGenerator.prototype._randomString = function (charsCount,
+                                                    alphabet) {
   var self = this;
-
   var digits = [];
-
-  // Around 96 bits of entropy is the amount of state in the Alea PRNG.
-  if (entropyBitsCount === undefined)
-    entropyBitsCount = 96;
-
-  var digitsCount =
-    stringLenForEntropy(entropyBitsCount, UNMISTAKABLE_CHARS.length);
-
-  for (var i = 0; i < digitsCount; i++) {
-    digits[i] = self.choice(UNMISTAKABLE_CHARS);
+  for (var i = 0; i < charsCount; i++) {
+    digits[i] = self.choice(alphabet);
   }
   return digits.join("");
+};
+
+RandomGenerator.prototype.id = function (charsCount) {
+  var self = this;
+  // 17 characters is around 96 bits of entropy is the amount of state
+  // in the Alea PRNG.
+  if (charsCount === undefined)
+    charsCount = 17;
+
+  return self._randomString(charsCount, UNMISTAKABLE_CHARS);
+};
+
+RandomGenerator.prototype.secret = function (charsCount) {
+  var self = this;
+  // Default to 256 bits of entropy, or 43 characters at 6 bits per
+  // character.
+  if (charsCount === undefined)
+    charsCount = 43;
+  return self._randomString(charsCount, BASE64_CHARS);
 };
 
 RandomGenerator.prototype.choice = function (arrayOrString) {

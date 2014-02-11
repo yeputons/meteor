@@ -421,7 +421,7 @@ Accounts.registerLoginHandler(function(options) {
 // (Also used by Meteor Accounts server)
 //
 Accounts._generateStampedLoginToken = function () {
-  return {token: Random.id(128), when: (new Date)};
+  return {token: Random.secret(), when: (new Date)};
 };
 
 ///

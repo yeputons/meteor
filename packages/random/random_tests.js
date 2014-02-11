@@ -19,6 +19,7 @@ Tinytest.add('random', function (test) {
 Tinytest.add('random - format', function (test) {
   var idLen = 17;
   test.equal(Random.id().length, idLen);
+  test.equal(Random.id(29).length, 29);
   var numDigits = 9;
   var hexStr = Random.hexString(numDigits);
   test.equal(hexStr.length, numDigits);
@@ -27,12 +28,6 @@ Tinytest.add('random - format', function (test) {
   test.isTrue(frac < 1.0);
   test.isTrue(frac >= 0.0);
 
-  // 23 characters chosen from a list of 55 characters is at least 128
-  // bits of entropy.
-  test.isTrue(Random.id(128).length >= 23);
-});
-
-Tinytest.add('random - length of random id provides enough entropy', function (test) {
-  test.equal(stringLenForEntropy(96, 55), 17);
-  test.equal(stringLenForEntropy(128, 55), 23);
+  test.equal(Random.secret().length, 43);
+  test.equal(Random.secret(13).length, 13);
 });

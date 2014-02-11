@@ -17,7 +17,7 @@ Github.requestCredential = function (options, credentialRequestCompleteCallback)
     credentialRequestCompleteCallback && credentialRequestCompleteCallback(new ServiceConfiguration.ConfigError("Service not configured"));
     return;
   }
-  var credentialToken = Random.id(128);
+  var credentialToken = Random.secret();
 
   var scope = (options && options.requestPermissions) || [];
   var flatScope = _.map(scope, encodeURIComponent).join('+');

@@ -18,7 +18,7 @@ Weibo.requestCredential = function (options, credentialRequestCompleteCallback) 
     return;
   }
 
-  var credentialToken = Random.id(128);
+  var credentialToken = Random.secret();
   // XXX need to support configuring access_type and scope
   var loginUrl =
         'https://api.weibo.com/oauth2/authorize' +
